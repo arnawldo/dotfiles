@@ -51,10 +51,20 @@ eval $PKG_UPDATE
 
 # Install dependencies
 echo "=== Installing dependencies ==="
-eval $PKG_INSTALL git stow tmux curl wget python3 python3-pip
+for pkg in git stow tmux curl wget python3 python3-pip; do
+    if ! command_exists "$pkg"; then
+        echo "Installing $pkg..."
+        eval $PKG_INSTALL "$pkg"
+    else
+        echo "$pkg is already installed"
+    fi
+done
 
 # Install Neovim (package versions might be outdated)
-if ! command_exists nvim; then
+if command_exists nvim; then
+    nvim_version=$(nvim --version | head -n 1 | cut -d ' ' -f 2)
+    echo "Neovim version $nvim_version is already installed"
+else
     echo "=== Installing Neovim ==="
     eval $PKG_INSTALL $NEOVIM_DEPS
 
@@ -94,14 +104,14 @@ git submodule update
 
 # Use stow to create symlinks
 echo "=== Creating symlinks with stow ==="
-stow nvim
-stow tmux
-stow shell-scripts
+stow --restow nvim
+stow --restow tmux
+stow --restow shell-scripts
 
 # Set up ZSH and Pure prompt
 if command_exists zsh; then
     echo "=== Setting up ZSH configuration ==="
-    stow zsh
+    stow --restow zsh
 
     # Set up Pure prompt
     echo "=== Setting up Pure prompt ==="
@@ -114,23 +124,31 @@ if command_exists zsh; then
         cp "$(dirname "$0")/zsh/.zsh/private.zsh.example" "$HOME/.zsh/private.zsh"
         echo "Created private.zsh file at $HOME/.zsh/private.zsh"
         echo "Please edit this file to add your private environment variables."
+    else
+        echo "private.zsh already exists, skipping creation"
     fi
 
-    # Install zsh-autosuggestions and zsh-syntax-highlighting if not already installed
+    # Install zsh plugins if not already installed
     if [ ! -d "$HOME/.zsh/zsh-autosuggestions" ]; then
         echo "Installing zsh-autosuggestions..."
         git clone https://github.com/zsh-users/zsh-autosuggestions.git "$HOME/.zsh/zsh-autosuggestions"
+    else
+        echo "zsh-autosuggestions already installed"
     fi
 
     if [ ! -d "$HOME/.zsh/zsh-syntax-highlighting" ]; then
         echo "Installing zsh-syntax-highlighting..."
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh/zsh-syntax-highlighting"
+    else
+        echo "zsh-syntax-highlighting already installed"
     fi
 
     # Check if oh-my-zsh is installed, install if not
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         echo "Installing Oh My Zsh..."
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    else
+        echo "Oh My Zsh already installed"
     fi
 else
     echo "ZSH is not installed. Skipping ZSH configuration."
