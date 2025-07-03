@@ -65,7 +65,7 @@ echo "=== Installing fnm (Fast Node Manager) ==="
 # Check for fnm first
 if ! command_exists fnm; then
     echo "Installing fnm..."
-    curl -fsSL https://fnm.vercel.app/install | bash
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
 
     # Source fnm in the current shell
     export PATH="$HOME/.local/share/fnm:$PATH"
