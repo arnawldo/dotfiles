@@ -28,7 +28,13 @@ This is a collection of my dotfiles files, managed by stow.
    git submodule update
    ```
 
-3. Use stow to symlink configurations:
+3. Run the setup script:
+
+   ```bash
+   ./setup_linux.sh
+   ```
+
+4. Use stow to symlink specific configurations (if you didn't use the setup script):
 
    ```bash
    # Install all configurations
