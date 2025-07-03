@@ -60,27 +60,40 @@ for pkg in git stow tmux curl wget python3 python3-pip; do
     fi
 done
 
-# Install Neovim (package versions might be outdated)
+# Install Neovim using package manager
 if command_exists nvim; then
     nvim_version=$(nvim --version | head -n 1 | cut -d ' ' -f 2)
     echo "Neovim version $nvim_version is already installed"
 else
     echo "=== Installing Neovim ==="
-    eval $PKG_INSTALL $NEOVIM_DEPS
 
-    # Clone Neovim repository
-    if [ ! -d "$HOME/neovim" ]; then
-        git clone https://github.com/neovim/neovim.git "$HOME/neovim"
-    else
-        echo "Neovim repository already exists, updating..."
-        cd "$HOME/neovim" && git pull
+    # Install Neovim based on the detected package manager
+    if [ "$PKG_MANAGER" = "apt-get" ]; then
+        # Try to use the Neovim PPA for Ubuntu/Debian for a more recent version
+        if command_exists add-apt-repository; then
+            echo "Adding Neovim PPA..."
+            sudo add-apt-repository -y ppa:neovim-ppa/stable
+            sudo apt-get update
+        fi
+        eval $PKG_INSTALL neovim
+    elif [ "$PKG_MANAGER" = "dnf" ]; then
+        eval $PKG_INSTALL neovim
+    elif [ "$PKG_MANAGER" = "yum" ]; then
+        # EPEL repository might be needed for some RHEL/CentOS versions
+        if ! rpm -q epel-release > /dev/null; then
+            sudo yum install -y epel-release
+        fi
+        eval $PKG_INSTALL neovim
     fi
 
-    # Build and install Neovim
-    cd "$HOME/neovim"
-    make CMAKE_BUILD_TYPE=Release
-    sudo make install
-    cd -
+    # Verify installation
+    if command_exists nvim; then
+        nvim_version=$(nvim --version | head -n 1 | cut -d ' ' -f 2)
+        echo "Successfully installed Neovim version $nvim_version"
+    else
+        echo "Warning: Neovim installation via package manager failed."
+        echo "You may need to install it manually or build from source."
+    fi
 fi
 
 
