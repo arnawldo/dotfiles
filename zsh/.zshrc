@@ -69,5 +69,20 @@ fi
 # rust
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
+# fnm (Fast Node Manager)
+if command -v fnm &> /dev/null; then
+    eval "$(fnm env --use-on-cd)"
+    # Add fnm completions
+    if [ -d "$HOME/.local/share/fnm" ]; then
+        export PATH="$HOME/.local/share/fnm:$PATH"
+        # Setup zsh completions for fnm
+        if [ ! -f "$HOME/.zsh/_fnm" ] && command -v fnm &> /dev/null; then
+            fnm completions --shell=zsh > "$HOME/.zsh/_fnm"
+            # Add completions directory to fpath if not already included
+            fpath=("$HOME/.zsh" $fpath)
+        fi
+    fi
+fi
+
 # Load private environment variables
 [[ -f "$HOME/.zsh/private.zsh" ]] && source "$HOME/.zsh/private.zsh"

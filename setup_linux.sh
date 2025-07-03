@@ -60,6 +60,27 @@ for pkg in git stow tmux curl wget python3 python3-pip zsh; do
     fi
 done
 
+# Install fnm (Fast Node Manager)
+echo "=== Installing fnm (Fast Node Manager) ==="
+if ! command_exists fnm; then
+    echo "Installing fnm..."
+    curl -fsSL https://fnm.vercel.app/install | bash
+
+    # Source fnm in the current shell
+    export PATH="$HOME/.local/share/fnm:$PATH"
+    eval "`fnm env`"
+
+    # Install the latest LTS version of Node.js
+    echo "Installing Node.js LTS..."
+    fnm install --lts
+    fnm default lts-latest
+
+    echo "Node.js installed: $(node -v)"
+    echo "npm installed: $(npm -v)"
+else
+    echo "fnm is already installed"
+fi
+
 # Install Neovim using package manager
 if command_exists nvim; then
     nvim_version=$(nvim --version | head -n 1 | cut -d ' ' -f 2)
