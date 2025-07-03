@@ -43,6 +43,9 @@ fi
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 [[ -f "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
 
+# Add user bin to path
+[[ -d "$HOME/bin" ]] && export PATH="$HOME/bin:$PATH"
+
 # Add dotfiles bin to path
 [[ -d "$HOME/repo/dotfiles/bin" ]] && export PATH="$HOME/repo/dotfiles/bin:$PATH"
 
