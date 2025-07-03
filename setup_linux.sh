@@ -51,7 +51,7 @@ eval $PKG_UPDATE
 
 # Install dependencies
 echo "=== Installing dependencies ==="
-for pkg in git stow tmux curl wget python3 python3-pip; do
+for pkg in git stow tmux curl wget python3 python3-pip zsh; do
     if ! command_exists "$pkg"; then
         echo "Installing $pkg..."
         eval $PKG_INSTALL "$pkg"
