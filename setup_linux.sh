@@ -181,6 +181,30 @@ else
     echo "To install ZSH, run: $PKG_INSTALL zsh"
 fi
 
+# Set ZSH as default shell if it's not already
+if command_exists zsh; then
+    echo "=== Setting ZSH as default shell ==="
+    CURRENT_SHELL=$(getent passwd $USER | cut -d: -f7)
+
+    if [[ "$CURRENT_SHELL" != *"zsh"* ]]; then
+        echo "Changing default shell to ZSH..."
+        # Check if zsh is in /etc/shells
+        if ! grep -q "$(command -v zsh)" /etc/shells; then
+            echo "Adding ZSH to /etc/shells..."
+            echo "$(command -v zsh)" | sudo tee -a /etc/shells
+        fi
+
+        # Change the default shell
+        chsh -s "$(command -v zsh)"
+
+        echo "Default shell changed to ZSH. You'll need to log out and back in for this to take effect."
+    else
+        echo "ZSH is already your default shell."
+    fi
+else
+    echo "ZSH is not installed. Skipping setting it as default shell."
+fi
+
 echo ""
 echo "=== Setup complete! ==="
 echo "You may need to restart your terminal or run 'source ~/.bashrc' to apply changes."
