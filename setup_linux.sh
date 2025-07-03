@@ -70,7 +70,12 @@ if ! command_exists fnm || ! command_exists node || ! command_exists npm; then
     export PATH="$HOME/.local/share/fnm:$PATH"
     # Try to use fnm, but don't fail if it's not available yet
     if command -v fnm &> /dev/null; then
-        eval "$(fnm env --use-on-cd)"
+        # Don't use zsh-specific commands in bash
+        if [ -n "$ZSH_VERSION" ]; then
+            eval "$(fnm env --use-on-cd)"
+        else
+            eval "$(fnm env)"
+        fi
     fi
 
     # Install the latest LTS version of Node.js
