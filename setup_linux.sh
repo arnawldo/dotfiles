@@ -113,7 +113,34 @@ echo "=== Installing lazydocker ==="
 if ! command_exists lazydocker; then
     echo "Installing lazydocker..."
     LAZYDOCKER_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-    curl -Lo lazydocker.tar.gz "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz"
+
+    # Detect architecture
+    ARCH=$(uname -m)
+    case "$ARCH" in
+        x86_64)
+            LAZYDOCKER_ARCH="x86_64"
+            ;;
+        aarch64|arm64)
+            LAZYDOCKER_ARCH="arm64"
+            ;;
+        armv7*|armv8*)
+            LAZYDOCKER_ARCH="armv7"
+            ;;
+        armv6*)
+            LAZYDOCKER_ARCH="armv6"
+            ;;
+        i386|i686)
+            LAZYDOCKER_ARCH="x86"
+            ;;
+        *)
+            echo "Unsupported architecture: $ARCH"
+            echo "Please install lazydocker manually from https://github.com/jesseduffield/lazydocker/releases"
+            LAZYDOCKER_ARCH="x86_64" # Default to x86_64 if unknown
+            ;;
+    esac
+
+    echo "Detected architecture: $ARCH, using lazydocker build for $LAZYDOCKER_ARCH"
+    curl -Lo lazydocker.tar.gz "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYDOCKER_VERSION}_Linux_${LAZYDOCKER_ARCH}.tar.gz"
     mkdir -p "$HOME/.local/bin"
     tar xf lazydocker.tar.gz -C "$HOME/.local/bin" lazydocker
     rm lazydocker.tar.gz
@@ -127,7 +154,34 @@ echo "=== Installing lazygit ==="
 if ! command_exists lazygit; then
     echo "Installing lazygit..."
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+
+    # Detect architecture
+    ARCH=$(uname -m)
+    case "$ARCH" in
+        x86_64)
+            LAZYGIT_ARCH="x86_64"
+            ;;
+        aarch64|arm64)
+            LAZYGIT_ARCH="arm64"
+            ;;
+        armv7*|armv8*)
+            LAZYGIT_ARCH="armv7"
+            ;;
+        armv6*)
+            LAZYGIT_ARCH="armv6"
+            ;;
+        i386|i686)
+            LAZYGIT_ARCH="x86"
+            ;;
+        *)
+            echo "Unsupported architecture: $ARCH"
+            echo "Please install lazygit manually from https://github.com/jesseduffield/lazygit/releases"
+            LAZYGIT_ARCH="x86_64" # Default to x86_64 if unknown
+            ;;
+    esac
+
+    echo "Detected architecture: $ARCH, using lazygit build for $LAZYGIT_ARCH"
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz"
     mkdir -p "$HOME/.local/bin"
     tar xf lazygit.tar.gz -C "$HOME/.local/bin" lazygit
     rm lazygit.tar.gz
