@@ -62,7 +62,8 @@ done
 
 # Install fnm (Fast Node Manager)
 echo "=== Installing fnm (Fast Node Manager) ==="
-if ! command_exists fnm || ! command_exists node || ! command_exists npm; then
+# Check for fnm first
+if ! command_exists fnm; then
     echo "Installing fnm..."
     curl -fsSL https://fnm.vercel.app/install | bash
 
@@ -77,7 +78,13 @@ if ! command_exists fnm || ! command_exists node || ! command_exists npm; then
             eval "$(fnm env)"
         fi
     fi
+    echo "fnm installation completed"
+else
+    echo "fnm is already installed"
+fi
 
+# Now check for Node.js
+if ! command_exists node || ! command_exists npm; then
     # Install the latest LTS version of Node.js
     echo "Installing Node.js LTS..."
     if command -v fnm &> /dev/null; then
@@ -96,7 +103,7 @@ if ! command_exists fnm || ! command_exists node || ! command_exists npm; then
         echo "After restarting, run: fnm install --lts && fnm default lts-latest"
     fi
 else
-    echo "fnm, Node.js, and npm are already installed"
+    echo "Node.js and npm are already installed"
     echo "Node.js version: $(node -v)"
     echo "npm version: $(npm -v)"
 fi
