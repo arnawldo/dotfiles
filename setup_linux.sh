@@ -121,6 +121,19 @@ stow --target="$HOME" --restow nvim
 stow --target="$HOME" --restow tmux
 stow --target="$HOME" --restow shell-scripts
 
+# Setup Tmux Plugin Manager (TPM) from submodule
+echo "=== Setting up Tmux Plugin Manager (TPM) ==="
+if [ -d "tmux/.tmux/plugins/tpm" ]; then
+    echo "Tmux Plugin Manager submodule is available"
+    # Make sure the symlinks are created
+    mkdir -p "$HOME/.tmux/plugins"
+    echo "Tmux Plugin Manager installed. Press prefix + I inside tmux to install plugins."
+else
+    echo "Tmux Plugin Manager submodule not found!"
+    echo "Please run: git submodule add https://github.com/tmux-plugins/tpm.git tmux/.tmux/plugins/tpm"
+    echo "Then run: git submodule init && git submodule update"
+fi
+
 # Set up ZSH and Pure prompt
 if command_exists zsh; then
     echo "=== Setting up ZSH configuration ==="
