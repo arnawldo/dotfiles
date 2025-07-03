@@ -62,23 +62,38 @@ done
 
 # Install fnm (Fast Node Manager)
 echo "=== Installing fnm (Fast Node Manager) ==="
-if ! command_exists fnm; then
+if ! command_exists fnm || ! command_exists node || ! command_exists npm; then
     echo "Installing fnm..."
     curl -fsSL https://fnm.vercel.app/install | bash
 
     # Source fnm in the current shell
     export PATH="$HOME/.local/share/fnm:$PATH"
-    eval "`fnm env`"
+    # Try to use fnm, but don't fail if it's not available yet
+    if command -v fnm &> /dev/null; then
+        eval "$(fnm env --use-on-cd)"
+    fi
 
     # Install the latest LTS version of Node.js
     echo "Installing Node.js LTS..."
-    fnm install --lts
-    fnm default lts-latest
+    if command -v fnm &> /dev/null; then
+        fnm install --lts
+        fnm default lts-latest
 
-    echo "Node.js installed: $(node -v)"
-    echo "npm installed: $(npm -v)"
+        if command -v node &> /dev/null && command -v npm &> /dev/null; then
+            echo "Node.js installed: $(node -v)"
+            echo "npm installed: $(npm -v)"
+        else
+            echo "Node.js or npm installation appears to have failed."
+            echo "You may need to restart your shell and run the setup script again."
+        fi
+    else
+        echo "fnm installation completed, but you need to restart your shell or source your .zshrc before using it."
+        echo "After restarting, run: fnm install --lts && fnm default lts-latest"
+    fi
 else
-    echo "fnm is already installed"
+    echo "fnm, Node.js, and npm are already installed"
+    echo "Node.js version: $(node -v)"
+    echo "npm version: $(npm -v)"
 fi
 
 # Install lazydocker
