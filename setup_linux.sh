@@ -117,14 +117,14 @@ git submodule update
 
 # Use stow to create symlinks
 echo "=== Creating symlinks with stow ==="
-stow --restow nvim
-stow --restow tmux
-stow --restow shell-scripts
+stow --target="$HOME" --restow nvim
+stow --target="$HOME" --restow tmux
+stow --target="$HOME" --restow shell-scripts
 
 # Set up ZSH and Pure prompt
 if command_exists zsh; then
     echo "=== Setting up ZSH configuration ==="
-    stow --restow zsh
+    stow --target="$HOME" --restow zsh
 
     # Set up Pure prompt
     echo "=== Setting up Pure prompt ==="
