@@ -81,6 +81,34 @@ else
     echo "fnm is already installed"
 fi
 
+# Install lazydocker
+echo "=== Installing lazydocker ==="
+if ! command_exists lazydocker; then
+    echo "Installing lazydocker..."
+    LAZYDOCKER_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    curl -Lo lazydocker.tar.gz "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz"
+    mkdir -p "$HOME/.local/bin"
+    tar xf lazydocker.tar.gz -C "$HOME/.local/bin" lazydocker
+    rm lazydocker.tar.gz
+    echo "lazydocker installed to $HOME/.local/bin/lazydocker"
+else
+    echo "lazydocker is already installed"
+fi
+
+# Install lazygit
+echo "=== Installing lazygit ==="
+if ! command_exists lazygit; then
+    echo "Installing lazygit..."
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    mkdir -p "$HOME/.local/bin"
+    tar xf lazygit.tar.gz -C "$HOME/.local/bin" lazygit
+    rm lazygit.tar.gz
+    echo "lazygit installed to $HOME/.local/bin/lazygit"
+else
+    echo "lazygit is already installed"
+fi
+
 # Install Neovim using package manager
 if command_exists nvim; then
     nvim_version=$(nvim --version | head -n 1 | cut -d ' ' -f 2)
