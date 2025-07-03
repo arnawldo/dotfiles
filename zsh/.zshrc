@@ -29,11 +29,11 @@ fpath=($ZSH_CUSTOM/functions $fpath)
 
 # pure theme setup (if available)
 if [[ -d "$HOME/.zsh/pure" ]]; then
-  fpath+=("$HOME/.zsh/pure")
-  autoload -U promptinit; promptinit
-  # turn on git stash status
-  zstyle :prompt:pure:git:stash show yes
-  prompt pure
+    fpath+=("$HOME/.zsh/pure")
+    autoload -U promptinit; promptinit
+    # turn on git stash status
+    zstyle :prompt:pure:git:stash show yes
+    prompt pure
 fi
 
 # fzf integration
@@ -51,16 +51,16 @@ fi
 
 # Load zsh-autosuggestions if available
 if [[ -f "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
-  source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
 elif [[ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
-  source "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    source "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
 # Load zsh-syntax-highlighting if available
 if [[ -f "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
-  source "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    source "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 elif [[ -f "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
-  source "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    source "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
 # asdf
