@@ -1,0 +1,9 @@
+# Private environment variables and API keys
+# This file should be excluded from version control
+
+# Example: API keys
+# export OPENAI_API_KEY="your-key-here"
+# export AWS_ACCESS_KEY_ID="your-key-here"
+# export AWS_SECRET_ACCESS_KEY="your-key-here"
+
+# Add your private environment variables below:

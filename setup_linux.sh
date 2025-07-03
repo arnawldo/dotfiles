@@ -98,6 +98,45 @@ stow nvim
 stow tmux
 stow shell-scripts
 
+# Set up ZSH and Pure prompt
+if command_exists zsh; then
+    echo "=== Setting up ZSH configuration ==="
+    stow zsh
+
+    # Set up Pure prompt
+    echo "=== Setting up Pure prompt ==="
+    bash zsh/.zsh/setup_pure.sh
+
+    # Create private.zsh from example template if it doesn't exist
+    if [ ! -f "$HOME/.zsh/private.zsh" ]; then
+        echo "Creating private.zsh from example template..."
+        mkdir -p "$HOME/.zsh"
+        cp "$(dirname "$0")/zsh/.zsh/private.zsh.example" "$HOME/.zsh/private.zsh"
+        echo "Created private.zsh file at $HOME/.zsh/private.zsh"
+        echo "Please edit this file to add your private environment variables."
+    fi
+
+    # Install zsh-autosuggestions and zsh-syntax-highlighting if not already installed
+    if [ ! -d "$HOME/.zsh/zsh-autosuggestions" ]; then
+        echo "Installing zsh-autosuggestions..."
+        git clone https://github.com/zsh-users/zsh-autosuggestions.git "$HOME/.zsh/zsh-autosuggestions"
+    fi
+
+    if [ ! -d "$HOME/.zsh/zsh-syntax-highlighting" ]; then
+        echo "Installing zsh-syntax-highlighting..."
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh/zsh-syntax-highlighting"
+    fi
+
+    # Check if oh-my-zsh is installed, install if not
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        echo "Installing Oh My Zsh..."
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    fi
+else
+    echo "ZSH is not installed. Skipping ZSH configuration."
+    echo "To install ZSH, run: $PKG_INSTALL zsh"
+fi
+
 echo ""
 echo "=== Setup complete! ==="
 echo "You may need to restart your terminal or run 'source ~/.bashrc' to apply changes."
